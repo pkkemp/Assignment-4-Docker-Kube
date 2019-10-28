@@ -43,7 +43,7 @@ def spell_check():
             inputtext = request.form["inputtext"]
             data.input = inputtext
             from subprocess import call
-            #call(["./a.out"])
+            call(["./a.out"])
             if inputtext is not None and inputtext is not "" :
                 return render_template("spell_check.html", data = data)
         return render_template("spell_check.html", data=data)
@@ -68,12 +68,8 @@ def login():
                 global session
                 session = True
                 data = "success"
-                #return redirect(url_for("spell_check"))
-
-
 
     return render_template("login.html", data = data)
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
