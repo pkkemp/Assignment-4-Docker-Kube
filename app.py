@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, make_response
 from flask_wtf.csrf import CSRFProtect
 
 import unittest, os
@@ -44,9 +44,13 @@ def spell_check():
             data.input = inputtext
             from subprocess import call
             call(["./a.out"])
-            if inputtext is not None and inputtext is not "" :
-                return render_template("spell_check.html", data = data)
-        return render_template("spell_check.html", data=data)
+
+            r = make_response(render_template("spell_check.html", data = data))
+            r.headers.set('Content-Security-Policy', "default-src 'self'")
+            return r
+        r = make_response(render_template("spell_check.html", data=data))
+        r.headers.set('Content-Security-Policy', "default-src 'self'")
+        return r
 
 
 def findUser(username, userList):
@@ -69,7 +73,10 @@ def login():
                 session = True
                 data = "success"
 
-    return render_template("login.html", data = data)
+    r = make_response(render_template("login.html", data = data))
+    r.headers.set('Content-Security-Policy', "default-src 'self'")
+    return r
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -85,10 +92,13 @@ def register():
         if theUser is None:
             userList.append(register)
             success = "Account creation success"
-        return render_template("register.html", data=success)
+        r = make_response(render_template("register.html", data=success))
+        r.headers.set('Content-Security-Policy', "default-src 'self'")
+        return r
 
-        return redirect(url_for("login"))
-    return render_template("register.html")
+    r = make_response(render_template("register.html"))
+    r.headers.set('Content-Security-Policy', "default-src 'self'")
+    return r
 
 
 if __name__ == "__main__":
