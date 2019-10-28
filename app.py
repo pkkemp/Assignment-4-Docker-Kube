@@ -10,11 +10,6 @@ session = False
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
-class UnitTests(unittest.TestCase):
-     def test_spell_check(self):
-         response = self.app.get('/spell_check', follow_redirects=True)
-         self.assertEqual(response.status_code, 200)
-
 class user:
   def __init__(self, username, password, twofactor):
     self.username = username
@@ -88,7 +83,6 @@ def register():
         twofact = request.form['2fa']
 
         register = user(username=uname, password=pword, twofactor=twofact)
-        # need to check here to see if the user already exists, if they do we don't need to recreate their account.
         global userList
         theUser = findUser(uname, userList)
         success = "Account creation failure"
