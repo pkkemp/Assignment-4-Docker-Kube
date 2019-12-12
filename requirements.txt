@@ -1,1 +1,6 @@
 Flask-WTF
+flask
+flask-sqlalchemy
+flask_table
+flask-login
+bcrypt
