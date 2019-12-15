@@ -19,7 +19,16 @@ csrf = CSRFProtect(app)
 login_manager = LoginManager()
 login_manager.login_view = "login"
 login_manager.init_app(app)
-SECRET_KEY = os.urandom(32)
+
+def get_secret(secret_name):
+    try:
+        with open('/run/secrets/{0}'.format(secret_name), 'r') as secret_file:
+            return secret_file.read()
+    except IOError:
+        return None
+
+SECRET_KEY = get_secret("csrf_gen")
+# SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
 class LoginHistoryTable(Table):
@@ -294,5 +303,5 @@ def spell_check():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="localhost", port=8080, debug=True)
 
